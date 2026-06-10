@@ -1,13 +1,13 @@
 -- ~/.config/nvim/init.lua
 
 -- Basic setup
-vim.opt.nu = true -- line numbers
+vim.opt.nu = true             -- line numbers
 vim.opt.relativenumber = true -- relative line numbers
-vim.opt.tabstop = 2 -- sets tab to 2 spaces
-vim.opt.shiftwidth = 2 -- number of spaces for each indentation
-vim.opt.expandtab = true -- spaces instead of tabs
+vim.opt.tabstop = 2           -- sets tab to 2 spaces
+vim.opt.shiftwidth = 2        -- number of spaces for each indentation
+vim.opt.expandtab = true      -- spaces instead of tabs
 vim.opt.smartindent = true
-vim.opt.hlsearch = false -- highlight search results off
+vim.opt.hlsearch = false      -- highlight search results off
 vim.opt.softtabstop = 2
 
 -- sets <Space>w to save file
@@ -30,7 +30,14 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   "folke/tokyonight.nvim",
-  "nvim-tree/nvim-tree.lua",
+
+  {
+    "nvim-tree/nvim-tree.lua",
+    config = function()
+      require("nvim-tree").setup()
+    end,
+  },
+
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
@@ -44,12 +51,15 @@ require("lazy").setup({
     end
   },
 
-  { "williamboman/mason.nvim",
+  {
+    "williamboman/mason.nvim",
     config = function()
       require("mason").setup()
     end
   },
-  { "williamboman/mason-lspconfig.nvim",
+
+  {
+    "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
@@ -58,8 +68,9 @@ require("lazy").setup({
       })
     end
   },
-  -- New LSP config using vim.lsp.config (nvim-lspconfig 1.0+ compatible with Neovim 0.11+)
-  { "neovim/nvim-lspconfig",
+
+  {
+    "neovim/nvim-lspconfig",
     dependencies = { "williamboman/mason-lspconfig.nvim" },
     config = function()
       -- Lua LSP
@@ -107,7 +118,9 @@ require("lazy").setup({
 
 -- Set colorscheme after plugins are loaded
 vim.cmd.colorscheme("tokyonight")
+vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")    -- Toggle file explorer
 
+-- LSP keybinds
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
@@ -117,6 +130,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, opts)  -- Auto-format file
+    vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, opts) -- Auto-format file
   end,
 })
