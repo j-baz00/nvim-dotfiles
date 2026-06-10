@@ -1,0 +1,12 @@
+# Lazy.nvim specific
+lazy-lock.json
+.lazy/
+
+# Neovim swap/backup files
+*.swp
+*.swo
+*~
+
+# OS junk files
+.DS_Store
+Thumbs.db
